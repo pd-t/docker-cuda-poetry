@@ -1,34 +1,41 @@
+# Docker-CUDA-Poetry: A Comprehensive Guide
 
-# Docker in Docker (docker-in-docker)
+Welcome to the Docker-CUDA-Poetry repository! This repository is designed as a foundational base for creating containers that integrate Poetry with CUDA support. It is published on Docker Hub for easy access and deployment. This guide provides an overview of the repository, detailed instructions for usage, and additional tips for optimizing your development experience.
 
-Create child containers _inside_ a container, independent from the host's docker instance. Installs Docker extension in the container along with needed CLIs.
+## Repository Overview
 
-## Options
+The Docker-CUDA-Poetry image is hosted on Docker Hub under the tag 'thomasfraunholz/docker-cuda-poetry'. This repository serves as an essential tool for developers seeking to leverage the power of Poetry in combination with CUDA capabilities within a Docker container.
 
-| Options Id | Description | Type | Default Value |
-|-----|-----|-----|-----|
-| installZsh | Install ZSH!? | boolean | true |
-| upgradePackages | Upgrade OS packages? | boolean | false |
-| dockerVersion | Select or enter a Docker/Moby CLI version. (Availability can vary by OS version.) | string | latest |
-| moby | Install OSS Moby build instead of Docker CE | boolean | true |
-| enableNonRootDocker | Enable non-root user to access Docker in container? | boolean | true |
+### Image Tags
 
-## Using this template
+The image tags follow the format `thomasfraunholz/docker-cuda-poetry:<poetry_version>+<cuda_version>`. For example, `thomasfraunholz/docker-cuda-poetry:1.6.1+117` indicates that the container uses Poetry version 1.6.1 and CUDA version 117. This naming convention is designed to provide clarity and ease in selecting the appropriate version for your needs.
 
-Dev containers can be useful for all types of applications including those that also deploy into a container based-environment. While you can directly build and run the application inside the dev container you create, you may also want to test it by deploying a built container image into your local Docker Desktop instance without affecting your dev container.
+### Devcontainer Features
 
-In many cases, the best approach to solve this problem is by bind mounting the docker socket, as demonstrated in [../docker-outside-of-docker](../docker-outside-of-docker). This template demonstrates an alternative technique called "Docker in Docker".
+The repository includes a development container (devcontainer) with Docker-in-Docker support. This feature allows you to run Docker commands inside your container, providing a more flexible and isolated development environment. Additionally, the devcontainer is configured to automatically pass local SSH keys and gitconfig settings into the container. This integration streamlines the setup process and enhances the convenience of local development.
 
-This template's approach creates pure "child" containers by hosting its own instance of the docker daemon inside this container.  This is compared to the forementioned "docker-_outside-of_-docker" method (sometimes called docker-outside-of-docker) that bind mounts the host's docker socket, creating "sibling" containers to the current container.
+## Getting Started
 
-For this technique to work, the "Docker in Docker" Feature included in this template automatically forces the parent container to be run as `--privileged` and adds a `/usr/local/share/docker-init.sh` ENTRYPOINT script that, spawns the `dockerd` process.
 
-The included `.devcontainer.json` can be altered to work with other Debian/Ubuntu-based container images such as `node` or `python`. For example, to use `mcr.microsoft.com/devcontainers/javascript-node`, update the `image` proprty as follows:
-
-```json
-"image": "mcr.microsoft.com/devcontainers/javascript-node:18-bullseye"
+Specify the base image from Docker Hub
+```Dockerfile
+FROM thomasfraunholz/docker-cuda-poetry:<tag>
 ```
 
----
+Replace <tag> with the specific version you need, for example, '1.6.1+117'.
 
-_Note: This file was auto-generated from the [devcontainer-template.json](https://github.com/devcontainers/templates/blob/main/src/docker-in-docker/devcontainer-template.json).  Add additional notes to a `NOTES.md`._
+Additional Steps: Here you can add any configurations, installations, or setups that are specific to your application. For example, copy your application's source code into the container
+```Dockerfile
+COPY . /app
+WORKDIR /app
+```
+Install any dependencies (if your project uses a `pyproject.toml` file)
+```Dockerfile
+RUN poetry install
+```
+Your application's specific commands can follow...
+
+```Dockerfile
+CMD [ "python", "./your-daemon-or-script.py" ]
+```
+...or any other commands you need to set up your environment.
