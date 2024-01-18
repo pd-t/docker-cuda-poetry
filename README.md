@@ -8,7 +8,7 @@ The Docker-CUDA-Poetry image is hosted on Docker Hub under the tag 'thomasfraunh
 
 ### Image Tags
 
-The image tags follow the format `thomasfraunholz/docker-cuda-poetry:<poetry_version>+<cuda_version>`. For example, `thomasfraunholz/docker-cuda-poetry:1.6.1+117` indicates that the container uses Poetry version 1.6.1 and CUDA version 117. This naming convention is designed to provide clarity and ease in selecting the appropriate version for your needs.
+The image tags follow the format `thomasfraunholz/docker-cuda-poetry:<poetry_version>-<cuda_version>`. For example, `thomasfraunholz/docker-cuda-poetry:1.6.1-117` indicates that the container uses Poetry version 1.6.1 and CUDA version 117. This naming convention is designed to provide clarity and ease in selecting the appropriate version for your needs.
 
 ### Devcontainer Features
 
@@ -22,7 +22,7 @@ Specify the base image from Docker Hub
 FROM thomasfraunholz/docker-cuda-poetry:<tag>
 ```
 
-Replace <tag> with the specific version you need, for example, '1.6.1+117'.
+Replace <tag> with the specific version you need, for example, '1.6.1-117'.
 
 Additional Steps: Here you can add any configurations, installations, or setups that are specific to your application. For example, copy your application's source code into the container
 ```Dockerfile
